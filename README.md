@@ -43,7 +43,7 @@ In this task,  a sequence of bit vectors is provided to the model. The input seq
 ## Notes & Observations
 * Need to use slicing to implement cumulative product so that gradient can pass through.
 * A small number (1e-20) needs to be added to the denominator of cosine similarity calculation to avoid dividing by zero. 
-* All memory locations are currently initialized to 1e-6 to prevent overflow of gradient.
+* Initial read vector, read weighting, write weighting, and usage vectors are currently initialized to a small number 1e-6. Will test out random initialization, as well as treating the initial values as learnable parameters.
 * For content-based addressing with small word size and number of memory locations, np.einsum provides faster computation than np.inner.
 * The diagonal of temporal linkage matrix should be set to 0 after each update.
 * For allocation weighting, the order of calculation is based on usage vector with permutated index list using np.argsort. We thus need to apply inverse permutation before returning the resulting allocation weighting. To obtain the inverse permutation, we just need to apply np.argsort to the permutated index list.
