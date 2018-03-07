@@ -7,7 +7,7 @@ Pure NumPy based implementation of [Differentiable Neural Computer](https://www.
 The code is currently structured as follows:
 
 * `accessor.py` implements the writing and reading interactions with memory based on the emitted interface vector from the controller, as detailed in the **METHODS** section of the paper.
-* `dnc.py` implements a DNC model with single layer LSTM controller.
+* `dnc_lstm.py` implements a DNC model with single layer LSTM controller.
 * `dnc_ff.py` implements a DNC model with a feedforward controller.
 * `util.py` includes a variety of helper functions.
 * `unit_test.py` provides test cases to check against the correctness of each operation. Currently still under active construction.
