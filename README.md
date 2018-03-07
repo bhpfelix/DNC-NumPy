@@ -38,3 +38,13 @@ In this task,  a sequence of bit vectors is provided to the model. The input seq
 * Complete unit tests and gradient checks for the model.
 * Implement and benchmark tasks including repeated copy and graph tasks.
 * Add manual backprop to double check the implementation and compare training speed with the autograd library.
+
+
+## Notes & Observations
+* Need to use slicing to implement cumulative product so that gradient can pass through.
+* A small number (1e-20) needs to be added to the denominator of cosine similarity calculation to avoid dividing by zero. 
+* All memory locations are currently initialized to 1e-6 to prevent overflow of gradient.
+* For content-based addressing with small word size and number of memory locations, np.einsum provides faster computation than np.inner.
+* The diagonal of temporal linkage matrix should be set to 0 after each update.
+* For allocation weighting, the order of calculation is based on usage vector with permutated index list using np.argsort. We thus need to apply inverse permutation before returning the resulting allocation weighting. To obtain the inverse permutation, we just need to apply np.argsort to the permutated index list.
+* For the copy task, the output emitted by the DNC when it is receiving input should not be penalized. Only output after receiving the reserved stop vector is used for loss calculation.
