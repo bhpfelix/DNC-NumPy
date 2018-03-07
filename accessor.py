@@ -73,9 +73,9 @@ class DNCAccessor(object):
         # Cosine Similarity
         n = np.dot(ks, mem.T)
         # einsum is fast: https://stackoverflow.com/questions/15616742/vectorized-way-of-calculating-row-wise-dot-product-two-matrices-with-scipy
-        ks_inner_prod = np.einsum('ij,ij->i', ks, ks)
-        mem_inner_prod = np.einsum('ij,ij->i', mem, mem)
-        d = np.sqrt(np.einsum('i,j->ij', ks_inner_prod, mem_inner_prod)) + 1.e-20 # prevent undefined cos similarity at 0 from breaking the code
+        ks_inner_prod = np.einsum('ij,ij->i', ks, ks) + 1.e-20
+        mem_inner_prod = np.einsum('ij,ij->i', mem, mem) + 1.e-20
+        d = np.sqrt(np.einsum('i,j->ij', ks_inner_prod, mem_inner_prod)) # + 1.e-20 # prevent undefined cos similarity at 0 from breaking the code
         sim = betas * (n / d)
         
         return softmax(sim)
