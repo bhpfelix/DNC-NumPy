@@ -38,7 +38,7 @@ class DNCFF(object):
         state = {}
         # not initializing to zero can prevent nan in loss
         # memory matrix
-        state['M'] = np.ones((self.N, self.W))*1e-6 # be careful about initialization, otherwise cosine similarity will blow up during backprop
+        state['M'] = np.zeros((self.N, self.W)) 
         # read vector
         state['rv'] = np.ones((self.R, self.W))*1e-6
         self.states = [state]
