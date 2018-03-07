@@ -42,7 +42,7 @@ class DNC(object):
         state = {}
         # not initializing to zero can prevent nan in loss
         # memory matrix
-        state['M'] = np.ones((self.N, self.W))*1e-6
+        state['M'] = np.zeros((self.N, self.W))
         # lstm hidden state
         state['h'] = np.zeros((1, self.hidden_size))
         # lstm cell state
