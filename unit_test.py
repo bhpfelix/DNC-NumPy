@@ -6,6 +6,8 @@ from dnc_ff import DNCFF
 
 R, N, W = 2,3,4
 
+## Forward Test Cases:
+
 class BaseAccessorTest(unittest.TestCase):
     def setUp(self):
         self.R = R
@@ -78,8 +80,34 @@ class LinkMat(BaseAccessorTest):
             for j in range(self.N):
                 if i != j:
                     _L[i][j] = (1. - ww[0,i] - ww[0,j]) * L_prev[i][j] + ww[0,i] * p_prev[0,j]
+        p_t, L = self.accessor.temporal_memory_linkage(p_prev, ww, L_prev)
         self.assertTrue(np.allclose(_p_t, p_t))  
-        self.assertTrue(np.allclose(_L, L))  
+        self.assertTrue(np.allclose(_L, L))
+
+# Gradient Test Cases
+def wrapper(func, param):
+    """
+    Used to wrap the arguments to function for gradient testing purpose
+    func: target function to check gradient
+    param: kwargs to func
+    """
+    def foo(param):
+        out = func(**param)
+        res = 0
+        for item in out:
+            res = res + np.sum(item)
+        return res
+
+    grad_foo = grad(foo)
+    return grad_foo(param)
+        
+class ContentAddressingDividedByZero(BaseAccessorTest):
+    def runTest(self):
+        mem = np.vstack([np.ones((1,self.W)), np.zeros((2,self.W))])
+        param = {'mem':mem, 'ks':nprn(1,4), 'betas':nprn(1,1)}
+        grad = wrapper(self.accessor.content_weighting, param)
+        for k, v in grad.items():
+            self.assertTrue(np.all(np.isfinite(v)))
         
 if __name__ == '__main__':
     unittest.main()
