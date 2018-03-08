@@ -129,7 +129,7 @@ def auto_diff(func, param):
     grad_foo = grad(foo)
     return grad_foo(param)
 
-def numeric_diff(func, param, delta=1e-2):
+def numeric_diff(func, param, delta=1e-6):
     """
     Used to wrap the arguments to function for gradient testing purpose
     func: target function to check gradient
@@ -162,6 +162,17 @@ def numeric_diff(func, param, delta=1e-2):
         results[k] = grad_v.reshape(shape)
     return results
 
+def get_grad(func_name, param):
+    """
+    func_name  -    string of function name
+    """
+    accessor1 = DNCAccessor(R,N,W)
+    accessor2 = DNCAccessor(R,N,W)
+    numdiff = numeric_diff(getattr(accessor1, func_name), param, 1e-6)
+    autodiff = auto_diff(getattr(accessor2, func_name), param)
+    return numdiff, autodiff
+    
+
 class NumericalDiffTest(unittest.TestCase):
     def runTest(self):
         def test_func(a,b,c):
@@ -178,10 +189,71 @@ class NumericalDiffTest(unittest.TestCase):
 class ContentAddressingDividedByZero(BaseAccessorTest):
     def runTest(self):
         mem = np.vstack([np.ones((1,self.W)), np.zeros((2,self.W))])
-        param = {'mem':mem, 'ks':nprn(1,4), 'betas':nprn(1,1)}
+        param = {'mem':mem, 'ks':nprn(1,4), 'betas':oneplus(nprn(1,1))}
         grad = auto_diff(self.accessor.content_weighting, param)
         for k, v in grad.items():
             self.assertTrue(np.all(np.isfinite(v)))
+            
+class InterfaceGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'interface':nprn(1,2*4+3*4+5*2+3)}
+        numdiff, autodiff = get_grad('process_interface', param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+            
+class ContentWeightGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'mem':nprn(3,4), 'ks':nprn(2,4), 'betas':oneplus(nprn(1,1))}
+        numdiff, autodiff = get_grad('content_weighting', param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+
+class UsageGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'f_t':nprn(2,1), 'rw_prev':nprn(2,3), 'ww_prev':nprn(1,3), 'u_prev':nprn(1,3)}
+        numdiff, autodiff = get_grad('usage_vec', param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+
+class AllocationGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'u':nprn(1,3)}
+        numdiff, autodiff = get_grad('allocation_weighting', param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))  
+            
+class WriteWeightingGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'M_prev':nprn(3,4), 'wk_t':nprn(1,4), 'ws_t':nprn(1,1), 'u':nprn(1,3), 'gw_t':nprn(1,1), 'ga_t':nprn(1,1)}
+        numdiff, autodiff = get_grad('write_weighting', param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))  
+            
+class LinkageGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'p_prev':nprn(1,3), 'ww':nprn(1,3), 'L_prev':nprn(3,3)}
+        numdiff, autodiff = get_grad('temporal_memory_linkage', param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+        
+class ReadWeightingGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'M':nprn(3,4), 'rk_t':nprn(2,4), 'rs_t':nprn(2,1), 'rw_prev':nprn(2,3), 'L':nprn(3,3), 'pi_t':nprn(2,3)}
+        numdiff, autodiff = get_grad('read_weighting', param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+            
+class StepForwardGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'M_prev':nprn(3,4), 'interface':nprn(1,2*4+3*4+5*2+3)}
+        numdiff, autodiff = get_grad('step_forward', param)
+        for k in param.keys():
+            print k
+            print numdiff[k]
+            print autodiff[k]
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+           
         
 if __name__ == '__main__':
     unittest.main()
