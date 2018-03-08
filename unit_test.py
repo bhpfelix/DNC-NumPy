@@ -84,6 +84,35 @@ class LinkMat(BaseAccessorTest):
         self.assertTrue(np.allclose(_p_t, p_t))  
         self.assertTrue(np.allclose(_L, L))
 
+        
+class LinkMat2(BaseAccessorTest):
+    def runTest(self):
+        L = np.zeros((self.N, self.N))
+        p = np.zeros((1, self.N))
+        
+        for i in range(5):
+            ww = np.random.rand(1,self.N)
+            ww /= np.sum(ww) + 1.
+            
+            if i == 3:
+                ww = np.array([[1,0,0]])
+            if i == 4:
+                ww = np.array([[0,1,0]])
+                
+            p, L =  self.accessor.temporal_memory_linkage(p, ww, L)
+            
+        self.assertTrue(np.all(L >= 0) and np.all(L <= 1))
+        self.assertTrue(np.sum(np.diag(L))==0)
+        self.assertTrue(np.all(np.sum(L, axis=0) <= 1.) and np.all(np.sum(L, axis=1) <= 1.))
+        self.assertTrue(np.all(np.array([1,0,0]) == L[1]))
+        
+        # Test forward, backward
+        rw_prev = np.array([[0,1,0],[1,0,0]])
+        self.assertTrue(np.all(np.dot(rw_prev, L)[0] == np.array([1,0,0])))
+        self.assertTrue(np.all(np.dot(rw_prev, L.T)[1] == np.array([0,1,0])))
+        
+        
+        
 # Gradient Test Cases
 def wrapper(func, param):
     """
