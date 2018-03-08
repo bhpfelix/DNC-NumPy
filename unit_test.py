@@ -112,9 +112,8 @@ class LinkMat2(BaseAccessorTest):
         self.assertTrue(np.all(np.dot(rw_prev, L.T)[1] == np.array([0,1,0])))
         
         
-        
-# Gradient Test Cases
-def wrapper(func, param):
+## Gradient Test Cases
+def auto_diff(func, param):
     """
     Used to wrap the arguments to function for gradient testing purpose
     func: target function to check gradient
@@ -129,14 +128,49 @@ def wrapper(func, param):
 
     grad_foo = grad(foo)
     return grad_foo(param)
+
+def numeric_diff(func, param, delta=1e-2):
+    """
+    Used to wrap the arguments to function for gradient testing purpose
+    func: target function to check gradient
+    param: kwargs to func
+    """
+    def foo(param):
+        out = func(**param)
+        res = 0
+        for item in out:
+            res = res + np.sum(item)
+        return res
+
+    results = {}
+    for k, v in param.items():
+        shape = v.shape
+        grad_v = np.zeros_like(v).flatten()
+        for i in range(v.size):
+            temp1 = param.copy()
+            temp2 = param.copy()
+            temp_val1 = v.copy()
+            temp_val2 = v.copy()
+            temp_val1[i] -= delta
+            temp_val2[i] += delta
+            temp1[k] = temp_val1.reshape(shape)
+            temp2[k] = temp_val2.reshape(shape)
+            val1 = foo(temp1)
+            val2 = foo(temp2)
+            grad_val = (val2 - val1) / (2.*delta)
+            grad_v[i] = grad_val
+        results[k] = grad_v.reshape(shape)
+    return results
         
 class ContentAddressingDividedByZero(BaseAccessorTest):
     def runTest(self):
         mem = np.vstack([np.ones((1,self.W)), np.zeros((2,self.W))])
         param = {'mem':mem, 'ks':nprn(1,4), 'betas':nprn(1,1)}
-        grad = wrapper(self.accessor.content_weighting, param)
+        grad = auto_diff(self.accessor.content_weighting, param)
         for k, v in grad.items():
             self.assertTrue(np.all(np.isfinite(v)))
         
 if __name__ == '__main__':
     unittest.main()
+    
+    
