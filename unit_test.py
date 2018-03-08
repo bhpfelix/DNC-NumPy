@@ -149,8 +149,8 @@ def numeric_diff(func, param, delta=1e-2):
         for i in range(v.size):
             temp1 = param.copy()
             temp2 = param.copy()
-            temp_val1 = v.copy()
-            temp_val2 = v.copy()
+            temp_val1 = v.flatten()
+            temp_val2 = v.flatten()
             temp_val1[i] -= delta
             temp_val2[i] += delta
             temp1[k] = temp_val1.reshape(shape)
@@ -161,7 +161,20 @@ def numeric_diff(func, param, delta=1e-2):
             grad_v[i] = grad_val
         results[k] = grad_v.reshape(shape)
     return results
-        
+
+class NumericalDiffTest(unittest.TestCase):
+    def runTest(self):
+        def test_func(a,b,c):
+            return (a**2) / 2. + (b**3) / 3. + (c**4) / 4.
+        a = nprn(2,3)
+        b = nprn(2,3)
+        c = nprn(2,3)
+        param = {'a':a, 'b':b, 'c':c}
+        numdiff = numeric_diff(test_func, param, 1e-6)
+        autodiff = auto_diff(test_func, param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+    
 class ContentAddressingDividedByZero(BaseAccessorTest):
     def runTest(self):
         mem = np.vstack([np.ones((1,self.W)), np.zeros((2,self.W))])
