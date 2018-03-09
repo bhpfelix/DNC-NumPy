@@ -242,18 +242,34 @@ class ReadWeightingGradient(unittest.TestCase):
         numdiff, autodiff = get_grad('read_weighting', param)
         for k in param.keys():
             self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+                            
+class ReadGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'M':nprn(3,4), 'rw':nprn(2,3)}
+        numdiff, autodiff = get_grad('read', param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+            
+class WriteGradient(unittest.TestCase):
+    def runTest(self):
+        param = {'M':nprn(3,4), 'e_t':nprn(1,4), 'v_t':nprn(1,4), 'ww':nprn(1,3)}
+        numdiff, autodiff = get_grad('write', param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
             
 class StepForwardGradient(unittest.TestCase):
     def runTest(self):
         param = {'M_prev':nprn(3,4), 'interface':nprn(1,2*4+3*4+5*2+3)}
-        numdiff, autodiff = get_grad('step_forward', param)
+        numdiff, autodiff = get_grad('step_forward_breakage_test', param)
         for k in param.keys():
             print k
             print numdiff[k]
             print autodiff[k]
         for k in param.keys():
             self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
-           
+     
+    
+# TODO: check gradient after the state of the accessors have changed from initial state
         
 if __name__ == '__main__':
     unittest.main()
