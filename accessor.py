@@ -229,6 +229,39 @@ class DNCAccessor(object):
         
         read_vec = self.read(M, rw)
         return M, read_vec
+    
+    
+    def step_forward_breakage_test(self, M_prev, interface):
+        """
+        Test step forward gradient breakage point, uncomment each of the return clause return intermediate results
+        """
+        rk_t, rs_t, wk_t, ws_t, e_t, v_t, f_t, ga_t, gw_t, pi_t = self.process_interface(interface)
+#         return rk_t, rs_t, wk_t, ws_t, e_t, v_t, f_t, ga_t, gw_t, pi_t
+
+        _s = self.states[-1] # previous state
+        L_prev, rw_prev, p_prev, ww_prev, u_prev = _s['L'], _s['rw'], _s['p'], _s['ww'], _s['u']
+
+        u = self.usage_vec(f_t, rw_prev, ww_prev, u_prev)
+#         return u
+
+        ww = self.write_weighting(M_prev, wk_t, ws_t, u, gw_t, ga_t)
+#         return ww
+        ww_prime = np.copy(ww) # stop gradient from flowing into M
+        M = self.write(M_prev, e_t, v_t, ww)
+#         return M
+
+        p, L = self.temporal_memory_linkage(p_prev, ww, L_prev)
+#         return p, L
+
+        rw = self.read_weighting(M, rk_t, rs_t, rw_prev, L, pi_t)
+#         return rw
+
+        self.states.append(dict(zip(['u', 'ww', 'p', 'L', 'rw'],[u, ww, p, L, rw])))
+
+        read_vec = self.read(M, rw)
+        return read_vec
+
+    #     return M, read_vec
 
 # Testing
 # accessor = DNCAccessor(2,3,4) #R, N, W
