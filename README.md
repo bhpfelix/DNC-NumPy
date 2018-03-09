@@ -47,4 +47,5 @@ In this task,  a sequence of bit vectors is provided to the model. The input seq
 * For content-based addressing with small word size and number of memory locations, np.einsum provides faster computation than np.inner.
 * The diagonal of temporal linkage matrix should be set to 0 after each update.
 * For allocation weighting, the order of calculation is based on usage vector with permutated index list using np.argsort. We thus need to apply inverse permutation before returning the resulting allocation weighting. To obtain the inverse permutation, we just need to apply np.argsort to the permutated index list.
+* Calculation of usage is not differentiable with respect to write weights. Need to stop gradient to pass through write weights during backprop.
 * For the copy task, the output emitted by the DNC when it is receiving input should not be penalized. Only output after receiving the reserved stop vector is used for loss calculation.
