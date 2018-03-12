@@ -192,7 +192,7 @@ class NumericalDiffTest(unittest.TestCase):
         for k in param.keys():
             self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
             
-    
+## Accessor Gradient Tests    
 class ContentAddressingDividedByZero(BaseAccessorTest):
     def runTest(self):
         mem = np.vstack([np.ones((1,self.W)), np.zeros((2,self.W))])
@@ -270,10 +270,35 @@ class StepForwardGradient(unittest.TestCase):
         numdiff, autodiff = get_grad('step_forward', param, delta=1e-8)
         for k in param.keys():
             self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
-     
-    
+               
+## DNCFF Gradient Checks
 # TODO: check gradient after the state of the accessors have changed from initial state
+
+class NNStepForwardGradient(unittest.TestCase):
+    def runTest(self):
+        dnc = DNCFF(input_size=6, output_size=4, hidden_size=32, R=1, N=10, W=4)
+        dnc_params = dnc._init_params()
+        x_t = nprn(1,6)
+        rv_prev = np.ones((1, 4))*1e-6
         
+        def reset():
+            dnc._init_state()
+            dnc.accessor._init_state()
+    
+        def forward_wrapper(**params):
+            return dnc.nn_step_forward(params, x_t, rv_prev)
+
+        numdiff = numeric_diff(forward_wrapper, dnc_params, 1e-6, reset)
+        reset()
+        autodiff = auto_diff(forward_wrapper, dnc_params)
+
+        for k in dnc_params.keys():
+            print k
+            print numdiff[k]
+            print autodiff[k]
+        for k in dnc_params.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+
 if __name__ == '__main__':
     unittest.main()
     
