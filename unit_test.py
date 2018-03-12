@@ -293,9 +293,50 @@ class NNStepForwardGradient(unittest.TestCase):
         autodiff = auto_diff(forward_wrapper, dnc_params)
 
         for k in dnc_params.keys():
-            print k
-            print numdiff[k]
-            print autodiff[k]
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+            
+class DNCStepForwardGradient(unittest.TestCase):
+    def runTest(self):
+        dnc = DNCFF(input_size=6, output_size=4, hidden_size=32, R=1, N=10, W=4)
+        dnc_params = dnc._init_params()
+        x_t = nprn(1,6)
+        
+        def reset():
+            dnc._init_state()
+            dnc.accessor._init_state()
+    
+        def forward_wrapper(**params):
+            return dnc.step_forward(params, x_t)
+
+        numdiff = numeric_diff(forward_wrapper, dnc_params, 1e-6, reset)
+        reset()
+        autodiff = auto_diff(forward_wrapper, dnc_params)
+
+        for k in dnc_params.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+            
+class DNCMultiStepForwardGradient(unittest.TestCase):
+    def runTest(self):
+        dnc = DNCFF(input_size=6, output_size=4, hidden_size=32, R=1, N=10, W=4)
+        dnc_params = dnc._init_params()
+        x_ts = [nprn(1,6) for _ in range(4)] # step 4 steps
+        
+        def reset():
+            dnc._init_state()
+            dnc.accessor._init_state()
+    
+        def forward_wrapper(**params):
+            out = [dnc.step_forward(params, x_t) for x_t in x_ts]
+            return out
+
+        numdiff = numeric_diff(forward_wrapper, dnc_params, 1e-6, reset)
+        reset()
+        autodiff = auto_diff(forward_wrapper, dnc_params)
+
+#         for k in dnc_params.keys():
+#             print k
+#             print numdiff[k]
+#             print autodiff[k]
         for k in dnc_params.keys():
             self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
 
