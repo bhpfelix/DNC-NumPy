@@ -162,13 +162,13 @@ def numeric_diff(func, param, delta=1e-6):
         results[k] = grad_v.reshape(shape)
     return results
 
-def get_grad(func_name, param):
+def get_grad(func_name, param, delta=1e-6):
     """
     func_name  -    string of function name
     """
     accessor1 = DNCAccessor(R,N,W)
     accessor2 = DNCAccessor(R,N,W)
-    numdiff = numeric_diff(getattr(accessor1, func_name), param, 1e-6)
+    numdiff = numeric_diff(getattr(accessor1, func_name), param, delta)
     autodiff = auto_diff(getattr(accessor2, func_name), param)
     return numdiff, autodiff
     
@@ -177,6 +177,24 @@ class NumericalDiffTest(unittest.TestCase):
     def runTest(self):
         def test_func(a,b,c):
             return (a**2) / 2. + (b**3) / 3. + (c**4) / 4.
+        a = nprn(2,3)
+        b = nprn(2,3)
+        c = nprn(2,3)
+        param = {'a':a, 'b':b, 'c':c}
+        numdiff = numeric_diff(test_func, param, 1e-6)
+        autodiff = auto_diff(test_func, param)
+        for k in param.keys():
+            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
+            
+class GradientDetachmentTest(unittest.TestCase):
+    def runTest(self):
+        self.states = []
+        def test_func(a,b,c):
+            d = oneplus(np.dot(a,b.T))
+            e = np.dot(b,c.T)
+            f = np.dot(d, e)
+            self.states.append(dict(zip(['a','b','c','d','e','f'], [a, b, c,d,e,f])))
+            return a, b, c, d, e, f
         a = nprn(2,3)
         b = nprn(2,3)
         c = nprn(2,3)
@@ -259,8 +277,8 @@ class WriteGradient(unittest.TestCase):
             
 class StepForwardGradient(unittest.TestCase):
     def runTest(self):
-        param = {'M_prev':nprn(3,4), 'interface':nprn(1,2*4+3*4+5*2+3)}
-        numdiff, autodiff = get_grad('step_forward_breakage_test', param)
+        param = {'M_prev':nprn(3,4)*0.1, 'interface':nprn(1,2*4+3*4+5*2+3)}
+        numdiff, autodiff = get_grad('step_forward_breakage_test', param, delta=1e-8)
         for k in param.keys():
             print k
             print numdiff[k]
