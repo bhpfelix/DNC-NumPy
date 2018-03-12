@@ -1,4 +1,5 @@
 from util import *
+from autograd.builtins import isinstance
 
 class DNCAccessor(object):
     """
@@ -246,7 +247,10 @@ class DNCAccessor(object):
 
         ww = self.write_weighting(M_prev, wk_t, ws_t, u, gw_t, ga_t)
 #         return ww
-        ww_prime = np.copy(ww) # stop gradient from flowing into M
+
+#         if isinstance(ww, np.numpy_boxes.ArrayBox):
+#             ww = ww._value # stop gradient from flowing into M
+            
         M = self.write(M_prev, e_t, v_t, ww)
 #         return M
 
@@ -254,14 +258,20 @@ class DNCAccessor(object):
 #         return p, L
 
         rw = self.read_weighting(M, rk_t, rs_t, rw_prev, L, pi_t)
-#         return rw
+#         return np.dot(rw, M)
 
-        self.states.append(dict(zip(['u', 'ww', 'p', 'L', 'rw'],[u, ww, p, L, rw])))
+        # This step breaks gradient calculation
+#         self.states.append(dict(zip(['u', 'ww', 'p', 'L', 'rw'],[u, ww, p, L, rw])))
 
+#         return np.dot(rw, M)
         read_vec = self.read(M, rw)
-        return read_vec
+        
+#         if isinstance(M, np.numpy_boxes.ArrayBox):
+#             M = M._value # stop gradient from flowing into M
+            
+#         return read_vec
 
-    #     return M, read_vec
+        return M , np.dot(rw, M)
 
 # Testing
 # accessor = DNCAccessor(2,3,4) #R, N, W
