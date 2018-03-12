@@ -48,5 +48,5 @@ In this task,  a sequence of bit vectors is provided to the model. The input seq
 * The diagonal of temporal linkage matrix should be set to 0 after each update.
 * For allocation weighting, the order of calculation is based on usage vector with permutated index list using np.argsort. We thus need to apply inverse permutation before returning the resulting allocation weighting. To obtain the inverse permutation, we just need to apply np.argsort to the permutated index list.
 * Calculation of usage is not differentiable with respect to write weights. May need to stop gradient to pass through write weights during backprop. Or alternatively, detach memory at each time step.
-* Zipping intermediate/interdependent into a state dictionary (i.e. `self.states.append(dict(zip(['u', 'ww', 'p', 'L', 'rw'],[u, ww, p, L, rw])))` in accessor.py) breaks autograd. Currently working on a fix.
+* Zipping intermediate/interdependent into a state dictionary (i.e. `self.states.append(dict(zip(['u', 'ww', 'p', 'L', 'rw'],[u, ww, p, L, rw])))` in `accessor.py`) breaks autograd. Currently working on a fix.
 * For the copy task, the output emitted by the DNC when it is receiving input should not be penalized. Only output after receiving the reserved stop vector is used for loss calculation.
