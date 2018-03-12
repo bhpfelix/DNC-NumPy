@@ -129,13 +129,18 @@ def auto_diff(func, param):
     grad_foo = grad(foo)
     return grad_foo(param)
 
-def numeric_diff(func, param, delta=1e-6):
+def numeric_diff(func, param, delta=1e-6, reset_func=None):
     """
     Used to wrap the arguments to function for gradient testing purpose
     func: target function to check gradient
     param: kwargs to func
+    
+    Important !!!!!!!!!!
+    reset_func: for functions that depends on its last state, make sure to pass in a deterministic state reset function
+    
     """
     def foo(param):
+        if reset_func is not None: reset_func() # re-initialize function state at each time step
         out = func(**param)
         res = 0
         for item in out:
@@ -168,7 +173,8 @@ def get_grad(func_name, param, delta=1e-6):
     """
     accessor1 = DNCAccessor(R,N,W)
     accessor2 = DNCAccessor(R,N,W)
-    numdiff = numeric_diff(getattr(accessor1, func_name), param, delta)
+    
+    numdiff = numeric_diff(getattr(accessor1, func_name), param, delta, accessor1._init_state)
     autodiff = auto_diff(getattr(accessor2, func_name), param)
     return numdiff, autodiff
     
@@ -186,23 +192,6 @@ class NumericalDiffTest(unittest.TestCase):
         for k in param.keys():
             self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
             
-class GradientDetachmentTest(unittest.TestCase):
-    def runTest(self):
-        self.states = []
-        def test_func(a,b,c):
-            d = oneplus(np.dot(a,b.T))
-            e = np.dot(b,c.T)
-            f = np.dot(d, e)
-            self.states.append(dict(zip(['a','b','c','d','e','f'], [a, b, c,d,e,f])))
-            return a, b, c, d, e, f
-        a = nprn(2,3)
-        b = nprn(2,3)
-        c = nprn(2,3)
-        param = {'a':a, 'b':b, 'c':c}
-        numdiff = numeric_diff(test_func, param, 1e-6)
-        autodiff = auto_diff(test_func, param)
-        for k in param.keys():
-            self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
     
 class ContentAddressingDividedByZero(BaseAccessorTest):
     def runTest(self):
@@ -278,11 +267,7 @@ class WriteGradient(unittest.TestCase):
 class StepForwardGradient(unittest.TestCase):
     def runTest(self):
         param = {'M_prev':nprn(3,4)*0.1, 'interface':nprn(1,2*4+3*4+5*2+3)}
-        numdiff, autodiff = get_grad('step_forward_breakage_test', param, delta=1e-8)
-        for k in param.keys():
-            print k
-            print numdiff[k]
-            print autodiff[k]
+        numdiff, autodiff = get_grad('step_forward', param, delta=1e-8)
         for k in param.keys():
             self.assertTrue(np.allclose(numdiff[k], autodiff[k]))
      
