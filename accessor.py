@@ -56,7 +56,7 @@ class DNCAccessor(object):
         f_t = sigmoid(f_t.reshape(self.R, 1))
         ga_t = sigmoid(ga_t)
         gw_t = sigmoid(gw_t)
-        pi_t = softmax(pi_t.reshape(self.R, 3))
+        pi_t = softmax(pi_t.reshape(3, self.R)).T 
         return rk_t, rs_t, wk_t, ws_t, e_t, v_t, f_t, ga_t, gw_t, pi_t  
         
     def content_weighting(self, mem, ks, betas):
