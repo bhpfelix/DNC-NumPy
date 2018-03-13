@@ -1,7 +1,7 @@
 # Imports
 import autograd.numpy as np
 from scipy.stats import truncnorm
-
+from autograd import grad
 
 import matplotlib.pyplot as plt
 
