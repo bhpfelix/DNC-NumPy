@@ -2,8 +2,32 @@
 import autograd.numpy as np
 from scipy.stats import truncnorm
 from autograd import grad
-
+import pickle as pk
 import matplotlib.pyplot as plt
+
+
+def load_pickle(filename):
+    try:
+        p = open(filename, 'rb')
+    except IOError:
+        print "Pickle file cannot be opened."
+        return None
+    try:
+        picklelicious = pk.load(p)
+    except ValueError:
+        print 'load_pickle failed once, trying again'
+        p.close()
+        p = open(filename, 'rb')
+        picklelicious = pk.load(p)
+
+    p.close()
+    return picklelicious
+
+def save_pickle(data_object, filename):
+    pickle_file = open(filename, 'wb')
+    pk.dump(data_object, pickle_file)
+    pickle_file.close()
+    
 
 # Utils: Numerically Stable, Vectorized implementations of util functions
 def nprn(*size):
