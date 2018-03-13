@@ -72,7 +72,7 @@ class DNCFF(object):
         M_prev, rv_prev = _s['M'], _s['rv']
         
         v_t, interface = self.nn_step_forward(params, x_t, rv_prev)
-#         print "interface!!!: ", interface
+
         M_t, rv_t = self.accessor.step_forward(M_prev, interface)
         state = dict(zip(['M', 'rv'], [M_t, rv_t]))
         self.states.append(state)
