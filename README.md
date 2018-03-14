@@ -34,6 +34,28 @@ Currently, only the copy task is implemented:
 
 In this task,  a sequence of bit vectors is provided to the model. The input sequence starts with a reserved start vector, then some random binary bit vectors, followed by a reserved stop vector. The model is expected to start reproducing the exact input bit vectors immediately after observing the stop vector.
 
+Input:
+The first column of input is the reserved start vector, and the 6th column is the reserved stop vector for input
+<p align="center">
+  <img width="460" height="100" src="doc/input.png">
+</p>
+
+Target:
+The last column is the reserved stop vector for output
+<p align="center">
+  <img width="460" height="100" src="doc/target.png">
+</p>
+
+Prediction after 20k iterations of training:
+<p align="center">
+  <img width="460" height="100" src="doc/pred.png">
+</p>
+
+Ouput logits:
+<p align="center">
+  <img width="460" height="100" src="doc/logit.png">
+</p>
+
 ## TODOs
 - [x] Complete unit tests and gradient checks for the model.
 - [ ] Implement and benchmark tasks including repeated copy and graph tasks.
