@@ -40,24 +40,24 @@ In this task,  a sequence of bit vectors is provided to the model. The input seq
 Input:
 The first column of input is the reserved start vector, and the 6th column is the reserved stop vector for input
 <p align="center">
-  <img width="460" height="100" src="doc/input.png">
+  <img width="335" height="153" src="doc/input.png">
 </p>
 
 Target:
 The last column is the reserved stop vector for output
 <p align="center">
-  <img width="460" height="100" src="doc/target.png">
+  <img width="335" height="153" src="doc/target.png">
 </p>
 
 Prediction:
 Using DNC with LSTM controller: `DNC(input_size=seq_wid+2, output_size=seq_wid+1, hidden_size=32, R=2, N=64, W=4)` with 30k iterations of training
 <p align="center">
-  <img width="460" height="100" src="doc/pred.png">
+  <img width="335" height="153" src="doc/pred.png">
 </p>
 
 Ouput logits:
 <p align="center">
-  <img width="460" height="100" src="doc/logit.png">
+  <img width="335" height="153" src="doc/logit.png">
 </p>
 
 ## TODOs
