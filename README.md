@@ -35,9 +35,9 @@ Currently, only the copy task is implemented:
 In this task,  a sequence of bit vectors is provided to the model. The input sequence starts with a reserved start vector, then some random binary bit vectors, followed by a reserved stop vector. The model is expected to start reproducing the exact input bit vectors immediately after observing the stop vector.
 
 ## TODOs
-* Complete unit tests and gradient checks for the model.
-* Implement and benchmark tasks including repeated copy and graph tasks.
-* Add manual backprop to double check the implementation and compare training speed with the autograd library.
+- [x] Complete unit tests and gradient checks for the model.
+- [ ] Implement and benchmark tasks including repeated copy and graph tasks.
+- [ ] Add manual backprop to double check the implementation and compare training speed with the autograd library.
 
 
 ## Notes & Observations
