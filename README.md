@@ -55,11 +55,6 @@ Using DNC with LSTM controller: `DNC(input_size=seq_wid+2, output_size=seq_wid+1
   <img width="335" height="153" src="doc/50k/pred.png">
 </p>
 
-Ouput logits:
-<p align="center">
-  <img width="335" height="153" src="doc/50k/logit.png">
-</p>
-
 ## TODOs
 - [x] Complete unit tests and gradient checks for the model.
 - [x] Update results on the copy task
