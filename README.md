@@ -17,8 +17,7 @@ The directory structure may subject to change. The code is Python 2.7.
 
 ## Setup
 
-The project relies on the NumPy based autograd library (`pip install autograd`) for automatic differentiation during backprop.  In near future, I want to remove this dependency by backprop manually after making sure everything works as intended. I will also include instruction for manually deriving the gradients to provide more insights into the architecture.
-Another long-term learning goal is to build my own automatic differentiation DAG constructor that can support this DNC.
+The project relies on the NumPy based autograd library (`pip install autograd`) for automatic differentiation during backprop.  In near future, I want to remove this dependency by building my own automatic differentiation DAG constructor.
 
 ## Differentiable Neural Computer
 DNC belongs to the family of memory-augmented neural networks, which are designed to be able to represent variables and data structures. Results from the paper have shown the potential for DNC to solve complex and structured tasks that are difficult for neural networks without external memory. The predecessor of DNC is the Neural Turing Machine (NTM). The major difference between the two arise from the difference in access mechanism to interface with the memory matrix:
