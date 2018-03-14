@@ -1,6 +1,6 @@
 # NumPy-DNC
 
-Pure NumPy based implementation of [Differentiable Neural Computer](https://www.nature.com/articles/nature20101) (DNC), intending to be read for understanding the architecture. In comparison to well developed deep learning frameworks, one of the advantages of reading through NumPy implementation is the explicit details of vectorizing computations to speed up training and inferencing. Operations are broken down according to corresponding subsections in the paper. 
+Pure NumPy based implementation of [Differentiable Neural Computer](https://deepmind.com/blog/differentiable-neural-computers/) (DNC), intending to be read for understanding the architecture. In comparison to well developed deep learning frameworks, one of the advantages of reading through NumPy implementation is the explicit details of vectorizing computations to speed up training and inferencing. Operations are broken down according to corresponding subsections in the paper. 
 
 ## Code Structure
 
