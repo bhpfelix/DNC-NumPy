@@ -60,7 +60,7 @@ Ouput logits:
 - [x] Complete unit tests and gradient checks for the model.
 - [x] Update results on the copy task
 - [ ] Add checks during training to assess memory usage and allocation
-- [ ] Expand to batched training and prediction
+- [ ] Expand to batched training and prediction, optimize for training speed
 - [ ] Implement and benchmark tasks including repeated copy and graph tasks.
 
 
