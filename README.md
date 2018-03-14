@@ -10,10 +10,10 @@ The code is currently structured as follows:
 * `dnc_lstm.py` implements a DNC model with single layer LSTM controller.
 * `dnc_ff.py` implements a DNC model with a feedforward controller.
 * `util.py` includes a variety of helper functions.
-* `unit_test.py` provides test cases to check against the correctness of each operation. Currently under active construction.
-*  `Trainer.ipynb` intends to provide an example trainer for DNC with visualization of results. Currently under active construction.
+* `unit_test.py` provides test cases to check against the correctness of each operation and the corresponding gradient.
+*  `CopyTask.ipynb` intends to provide an example trainer for DNC with visualization of results on the copy task.
 
-The directory structure may subject to change after all the testings are completed. The code is Python 2.7.
+The directory structure may subject to change. The code is Python 2.7.
 
 ## Setup
 
