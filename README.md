@@ -62,7 +62,6 @@ Ouput logits:
 - [ ] Add checks during training to assess memory usage and allocation
 - [ ] Expand to batched training and prediction
 - [ ] Implement and benchmark tasks including repeated copy and graph tasks.
-- [ ] Add manual backprop to double check the implementation and compare training speed with the autograd library.
 
 
 ## Notes & Observations
