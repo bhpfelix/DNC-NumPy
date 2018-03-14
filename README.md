@@ -59,6 +59,8 @@ Ouput logits:
 
 ## TODOs
 - [x] Complete unit tests and gradient checks for the model.
+- [x] Update results on the copy task
+- [ ] Expand to batched training and prediction
 - [ ] Implement and benchmark tasks including repeated copy and graph tasks.
 - [ ] Add manual backprop to double check the implementation and compare training speed with the autograd library.
 
