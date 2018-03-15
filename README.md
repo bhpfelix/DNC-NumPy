@@ -4,7 +4,7 @@
   <img src="doc/dnc.png">
 </p>
 
-Pure NumPy based implementation of [Differentiable Neural Computer](https://deepmind.com/blog/differentiable-neural-computers/) (DNC), intending to be read for understanding the architecture. In comparison to well developed deep learning frameworks, one of the advantages of reading through NumPy implementation is the explicit details of vectorizing computations to speed up training and inferencing. Operations are broken down according to corresponding subsections in the paper. 
+Pure NumPy based implementation of [Differentiable Neural Computer](https://deepmind.com/blog/differentiable-neural-computers/) (DNC), intending to be read for understanding the architecture. In comparison to well developed deep learning frameworks, one of the advantages of reading through NumPy implementation is the explicit details of vectorizing computations to speed up training and inferencing. Operations are broken down according to corresponding subsections in the paper.
 
 ## Code Structure
 
@@ -40,19 +40,19 @@ In this task,  a sequence of bit vectors is provided to the model. The input seq
 Input:
 The first column of input is the reserved start vector, and the 6th column is the reserved stop vector for input
 <p align="center">
-  <img width="335" height="153" src="doc/50k/input.png">
+  <img src="doc/30k/input.png">
 </p>
 
 Target:
 The last column is the reserved stop vector for output
 <p align="center">
-  <img width="335" height="153" src="doc/50k/target.png">
+  <img src="doc/30k/target.png">
 </p>
 
 Prediction:
-Using DNC with LSTM controller: `DNC(input_size=seq_wid+2, output_size=seq_wid+1, hidden_size=32, R=2, N=64, W=4)` with 50k iterations of training
+Using DNC with LSTM controller: `DNC(input_size=seq_wid+2, output_size=seq_wid+1, hidden_size=32, R=2, N=64, W=4)` with 30k iterations of training
 <p align="center">
-  <img width="335" height="153" src="doc/50k/pred.png">
+  <img src="doc/30k/pred.png">
 </p>
 
 ## TODOs
@@ -65,7 +65,7 @@ Using DNC with LSTM controller: `DNC(input_size=seq_wid+2, output_size=seq_wid+1
 
 ## Notes & Observations
 * Need to use slicing to implement cumulative product so that gradient can pass through.
-* A small number (1e-20) needs to be added to the denominator of cosine similarity calculation to avoid dividing by zero. 
+* A small number (1e-20) needs to be added to the denominator of cosine similarity calculation to avoid dividing by zero.
 * Initial read vector, read weighting, write weighting, and usage vectors are currently initialized to a small number 1e-6. Will test out random initialization, as well as treating the initial values as learnable parameters.
 * For content-based addressing with small word size and number of memory locations, np.einsum provides faster computation than np.inner.
 * The diagonal of temporal linkage matrix should be set to 0 after each update.
