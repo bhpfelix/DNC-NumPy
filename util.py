@@ -33,6 +33,12 @@ def save_pickle(data_object, filename):
 def nprn(*size):
     return truncnorm.rvs(-2, 2, size=size)
 
+def l2(x):
+    """
+    stable l2-norm
+    """
+    return np.sqrt(np.sum(np.multiply(x, x)) + 1.e-20) 
+
 def oneplus(x, limit=30.):
     """
     Numerically stable implementation: | log(1+exp(30)) - 30 | < 1e-10
