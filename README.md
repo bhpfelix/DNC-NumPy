@@ -16,7 +16,7 @@ The code is currently structured as follows:
 * `util.py` includes a variety of helper functions.
 * `unit_test.py` provides test cases to check against the correctness of each operation and the corresponding gradient.
 *  `CopyTask.ipynb` intends to provide an example trainer for DNC with visualization of results on the copy task.
-*  `CopyTask.ipynb` provides visualization of results on the repeated copy task.
+*  `RepeatedCopyTask.ipynb` provides visualization of results on the repeated copy task.
 
 The directory structure may subject to change. The code is Python 2.7.
 
