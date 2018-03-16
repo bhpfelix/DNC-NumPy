@@ -32,7 +32,7 @@ DNC belongs to the family of memory-augmented neural networks, which are designe
 
 ### Tasks
 
-Currently, the copy task is implemented:
+Currently, the copy and repeated copy tasks are implemented:
 
 #### Copy
 
