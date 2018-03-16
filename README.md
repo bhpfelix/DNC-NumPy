@@ -50,7 +50,7 @@ The last column is the reserved stop vector for output
   <img src="doc/30k/target.png">
 </p>
 
-Prediction:
+Output:
 Using DNC with LSTM controller: `DNC(input_size=seq_wid+2, output_size=seq_wid+1, hidden_size=32, R=2, N=64, W=8)` with 30k iterations of training
 <p align="center">
   <img src="doc/30k/pred.png">
