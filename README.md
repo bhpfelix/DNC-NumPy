@@ -16,6 +16,7 @@ The code is currently structured as follows:
 * `util.py` includes a variety of helper functions.
 * `unit_test.py` provides test cases to check against the correctness of each operation and the corresponding gradient.
 *  `CopyTask.ipynb` intends to provide an example trainer for DNC with visualization of results on the copy task.
+*  `CopyTask.ipynb` provides visualization of results on the repeated copy task.
 
 The directory structure may subject to change. The code is Python 2.7.
 
@@ -54,6 +55,10 @@ Using DNC with LSTM controller: `DNC(input_size=seq_wid+2, output_size=seq_wid+1
 <p align="center">
   <img src="doc/30k/pred.png">
 </p>
+
+#### Repeated Copy
+
+In this task, a sequence of bit vectors is provided to the model. The input sequence starts with a reserved start vector, then some random binary bit vectors, followed by a reserved count vector, providing the number of intended repetition in a reserved channel. The model is expected to start reproducing the exact input bit vectors for given number of repetitions immediately after observing the count vector.
 
 ## TODOs
 - [x] Complete unit tests and gradient checks for the model.
