@@ -41,24 +41,42 @@ In this task,  a sequence of bit vectors is provided to the model. The input seq
 Input:
 The first column of input is the reserved start vector, and the 6th column is the reserved stop vector for input
 <p align="center">
-  <img src="doc/30k/input.png">
+  <img src="doc/copy/input.png">
 </p>
 
 Target:
 The last column is the reserved stop vector for output
 <p align="center">
-  <img src="doc/30k/target.png">
+  <img src="doc/copy/target.png">
 </p>
 
 Output:
 Using DNC with LSTM controller: `DNC(input_size=seq_wid+2, output_size=seq_wid+1, hidden_size=32, R=2, N=64, W=8)` with 30k iterations of training
 <p align="center">
-  <img src="doc/30k/pred.png">
+  <img src="doc/copy/output.png">
 </p>
 
 #### Repeated Copy
 
 In this task, a sequence of bit vectors is provided to the model. The input sequence starts with a reserved start vector, then some random binary bit vectors, followed by a reserved count vector, providing the number of intended repetition in a reserved channel. The model is expected to start reproducing the exact input bit vectors for given number of repetitions immediately after observing the count vector.
+
+Input:
+The first column of input is the reserved start vector, and the 6th column is the reserved count vector for input, with expected number of repetition placed in the count channel (first row). The color shown in the image below is normalized, where the expected number of repetition is 4.
+<p align="center">
+  <img src="doc/repeated_copy/input.png">
+</p>
+
+Target:
+The last column is the reserved stop vector for output
+<p align="center">
+  <img src="doc/repeated_copy/target.png">
+</p>
+
+Output:
+Using DNC with LSTM controller: `DNC(input_size=seq_wid+2, output_size=seq_wid+1, hidden_size=32, R=2, N=64, W=8)` with 50k iterations of training
+<p align="center">
+  <img src="doc/repeated_copy/output.png">
+</p>
 
 ## TODOs
 - [x] Complete unit tests and gradient checks for the model.
