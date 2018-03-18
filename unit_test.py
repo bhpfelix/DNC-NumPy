@@ -4,6 +4,11 @@ from accessor import DNCAccessor
 from dnc_lstm import DNC
 from dnc_ff import DNCFF
 
+__author__ = 'Haoping Bai'
+__copyright__ = 'Copyright (c) 2018, Haoping Bai'
+__email__ = 'bhpfelix@gmail.com'
+__license__ = 'MIT'
+
 R, N, W = 2,3,4
 
 ## Forward Test Cases:
