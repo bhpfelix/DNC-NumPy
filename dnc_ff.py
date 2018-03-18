@@ -1,6 +1,10 @@
 from util import *
 from accessor import DNCAccessor
 
+__author__ = 'Haoping Bai'
+__copyright__ = 'Copyright (c) 2018, Haoping Bai'
+__license__ = 'MIT'
+
 class DNCFF(object):
     """
     DNC with feedforward controller, using autodiff, with batchsize=1
