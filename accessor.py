@@ -1,6 +1,10 @@
 from util import *
 from autograd.builtins import isinstance
 
+__author__ = 'Haoping Bai'
+__copyright__ = 'Copyright (c) 2018, Haoping Bai'
+__license__ = 'MIT'
+
 class DNCAccessor(object):
     """
     DNC Accessor, using autodiff, with batchsize=1
