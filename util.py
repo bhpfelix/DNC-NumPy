@@ -5,6 +5,10 @@ from autograd import grad
 import pickle as pk
 import matplotlib.pyplot as plt
 
+__author__ = 'Haoping Bai'
+__copyright__ = 'Copyright (c) 2018, Haoping Bai'
+__email__ = 'bhpfelix@gmail.com'
+__license__ = 'MIT'
 
 def load_pickle(filename):
     try:
